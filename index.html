@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Pràctica IPO. Part 3. Prototip i avaluació</title>
+
+
+    <!-- jQuery -->
+    <script src="js/jquery-3.3.1.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js" ></script>
+
+    <!-- Datepicker -->
+    <link href="/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+    <script src="js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+   <![endif]-->
+
+    <style>
+      .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: rgb(211,211,211);
+      color: black;
+      text-align: center;
+      }
+      
+      .reg-nom {font-weight:bold;}
+      .reg-cognoms {font-weight:bold;}
+      .reg-sexe {font-weight:bold;}
+      .reg-email {font-weight:bold;}
+      .reg-telefon {font-weight:bold;}
+      
+      .res-nom {font-weight:bold;}
+      .res-cognoms {font-weight:bold;}
+      .res-sexe {font-weight:bold;}
+      .res-email {font-weight:bold;}
+      .res-telefon {font-weight:bold;}
+      .res-carrer {font-weight:bold;}
+      .res-escala {font-weight:bold;}
+      .res-pis {font-weight:bold;}
+
+      .res-periodic {font-weight:bold;}
+      .res-dia1 {font-weight:bold;}
+      .res-hora1 {font-weight:bold;}
+      .res-durada1 {font-weight:bold;}
+      .res-dia2 {font-weight:bold;}
+      .res-hora2 {font-weight:bold;}
+      .res-durada2 {font-weight:bold;}
+      .res-extres1 {font-weight:bold;}
+      .res-extres2 {font-weight:bold;}
+      .res-preuhora {font-weight:bold;}
+      .res-total {font-weight:bold;}  
+    </style>
+
+    <!-- URLs consultades per a la construcció del prototip -->
+    <!-- https://www.w3schools.com/bootstrap/ -->
+    <!-- https://getbootstrap.com/docs/3.3 -->
+    <!-- https://bootsnipp.com/ -->
+    <!-- http://makitweb.com/how-to-add-datepicker-in-bootstrap/ -->
+    <!-- https://bootstrap-datepicker.readthedocs.io/en/latest/ -->
+    <!-- https://github.com/uxsolutions/bootstrap-datepicker -->
+
+    <!-- mòduls javascript del prototip -->
+    <script src="prototip/Utils.js"></script>
+    <script src="prototip/Registre.js"></script>
+    <script src="prototip/Reserva.js"></script>    
+    <script src="prototip/Controller.js"></script>
+    <script>
+      var registre = new Registre();
+      var reserva = new Reserva();
+      var controller = new Controller(registre, reserva);
+
+    </script>
+  </head>
+  <body>
+
+    <div class="page-header">
+      <h1>Pràctica IPO Part 3. Prototip i avaluació</h1>
+    </div>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+   <!-- Brand and toggle get grouped for better mobile display -->
+   <div class="navbar-header">
+     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+     </button>
+     <a class="navbar-brand" href="javascript:controller.navigate('inici')">Marca comercial</a>
+   </div>
+
+   <!-- Collect the nav links, forms, and other content for toggling -->
+   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+     <ul class="nav navbar-nav">
+            <li id="liAjuda"><a href="javascript:controller.navigate('ajuda')">Ajuda</a></li>
+     </ul>
+     <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="login" id="idUsrLogin">
+         <input type="password" class="form-control" placeholder="password" id="idUsrPassword">
+            </div>
+            <button type="button" class="btn btn-default" onclick="javascript:controller.login()">Accés usuari registrat</button>
+     </form>
+   </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
+
+      <!-- form CP -->
+      <div class="container acc-settings" id="formCP" style="visibility: visible;">
+   <form>
+     <fieldset class="form-group">
+            <label for="idCp">Si no t'has registrat, indica el codi postal </label>
+            <input type="text" class="form-control" id="idCp" placeholder="08000" maxlength="5" value="">
+     </fieldset>
+     <button type="button" class="btn btn-primary" onclick="javascript:controller.validarCP()">Reservar</button>
+   </form>
+      </div>
+
+      <!-- form CP no vàlid -->
+      <div class="container acc-settings" id="formCPNoValid" style="visibility: hidden;">
+   <h1>Ho sentim, aquest codi postal no està cobert pel servei</h1><br />
+   <h2><a href="javascript:controller.navigate('inici')">Tornar a la pàgina d'inici de reserva</a></h2>
+      </div>
+
+      <!-- tabs registre  -->
+      <div class="container acc-settings" id="formTabsRegistre" style="visibility: hidden;">
+   <div class="container acc-settings" id="tabsRegistre">
+     <ul class="nav nav-tabs">
+       <li id="liRegUsuari"><a href="javascript:controller.navigate('reg usuari')">Registre d'usuari</a></li>
+       <li id="liRegVivenda"><a href="javascript:controller.navigate('reg vivenda')">Registre de vivenda</a></li>
+     </ul>
+   </div>
+      </div>
+
+      <!-- form Registre Usuari -->
+      <div class="container-fluid acc-settings" id="formRegistreUsuari" style="visibility: hidden;">
+   <div class="row">
+
+     <div class="col-lg-9">
+       <form>
+         <fieldset class="form-group">
+      <label for="idNom">Nom :</label>
+      <input type="text" class="form-control" id="idNom" placeholder="nom" maxlength="40">
+
+      <label for="idCognoms">Cognoms :</label>
+      <input type="text" class="form-control" id="idCognoms" placeholder="cognoms" maxlength="70">
+
+      <div style="padding: 10px;">
+        <label class="radio-inline">
+          <input type="radio" name="optradio" value="home" id="idHome"> Home
+        </label>
+
+        <label class="radio-inline">
+          <input type="radio" name="optradio" value="dona" id="idDona"> Dona
+        </label>
+      </div>
+
+      <label for="idEmail">Correu electrònic :</label>
+      <input type="email" class="form-control" id="idEmail" placeholder="correu@electronic.com" maxlength="50">
+
+      <label for="idPhone">Telèfon :</label>
+      <input type="tel" class="form-control" id="idPhone" placeholder="999 999 999" maxlength="11">
+
+      <label for="idPassword">Password :</label>
+      <input type="password" class="form-control" id="idPassword" placeholder="password" maxlength="20">
+
+      <label for="idRePassword">Repetir password :</label>
+      <input type="password" class="form-control" id="idRepassword" placeholder="repetir password" maxlength="20">
+
+         </fieldset>
+         <button type="button" class="btn btn-primary" onclick="javascript:controller.navigate('reg vivenda')">Registrar Vivenda</button>
+       </form>
+     </div>
+
+     <div class="col-lg-3" style="border: solid; border-width: thin; background-color: rgb(211,211,211);" >
+       <h3>Resum del registre</h3>
+       <p>Nom : <span class="reg-nom"></span></p>
+       <p>Cognoms : <span class="reg-cognoms"></span></p>
+       <p>Home /Dona : <span class="reg-sexe"></span></p>
+       <p>Correu electrònic : <span class="reg-email"></span></p>
+       <p>Telèfon : <span class="reg-telefon"></span></p>
+     </div>
+
+   </div>
+      </div>
+
+      <!-- form Registre Vivenda -->
+      <div class="container-fluid acc-settings" id="formRegistreVivenda" style="visibility: hidden;">
+   <div class="row">
+
+     <div class="col-lg-9">
+       <form>
+         <fieldset class="form-group">
+           <label for="idCarrer">Carrer :</label>
+           <input type="text" class="form-control" id="idCarrer" placeholder="carrer" maxlength="80">
+
+              <label for="idEscala">Número :</label>
+           <input type="text" class="form-control" id="idEscala" placeholder="Escala" maxlength="20">
+
+           <label for="idPisPorta">Pis / Porta :</label>
+           <input type="text" class="form-control" id="idPisPorta" placeholder="pis, porta, ..." maxlength="50">
+
+           <label for="idAltres">Altres indicacions :</label>
+           <textarea class="form-control" id="idAltres" rows="5"></textarea>
+         </fieldset>
+         <button type="button" class="btn btn-primary" onclick="javascript:controller.validarRegistre()">Validar Registre</button>
+       </form>
+     </div>
+
+     <div class="col-lg-3" style="border: solid; border-width: thin; background-color: rgb(211,211,211);" >
+       <h3>Resum del registre</h3>
+       <p>Nom : <span class="reg-nom"></span></p>
+       <p>Cognoms : <span class="reg-cognoms"></span></p>
+       <p>Home /Dona : <span class="reg-sexe"></span></p>
+       <p>Correu electrònic : <span class="reg-email"></span></p>
+       <p>Telèfon : <span class="reg-telefon"></span></p>
+     </div>
+
+   </div>
+      </div>
+
+      <!-- tabs reserva  -->
+      <div class="container acc-settings" id="formTabsReserva" style="visibility: hidden;">
+   <div class="container acc-settings" id="tabsReserva">
+     <ul class="nav nav-tabs">
+       <li id="liResDia"><a href="javascript:controller.navigate('reserva dia')">Periodicitat i dia</a></li>
+       <li id="liResTipus"><a href="javascript:controller.navigate('reserva tipus')">Tipus de servei</a></li>
+       <li id="liResPreu"><a href="javascript:controller.navigate('reserva preu')">Preu per hora</a></li>
+       <li id="liResPagament"><a href="javascript:controller.navigate('reserva pagament')">Pagament</a></li>
+     </ul>
+   </div>
+      </div>
+
+      <!-- form periodicitat i dia -->
+      <div class="container-fluid acc-settings" id="formReservaDia" style="visibility: hidden;">
+   <div class="row">
+
+     <!-- form periodicitat -->
+     <div class="col-lg-9">
+       <form>
+         <fieldset class="form-group">
+
+      <div style="padding: 10px;">
+        <label class="radio-inline">
+          <input type="radio" name="optperiodic" value="unic" id="idUnic"> Servei únic
+        </label>
+
+        <label class="radio-inline">
+          <input type="radio" name="optperiodic" value="un dia setmana" id="idDUnDiaSetmana"> Setmanal, un dia
+        </label>
+
+        <label class="radio-inline">
+          <input type="radio" name="optperiodic" value="dos dies setmana" id="idDosDiesSetmana"> Setmanal, dos dies
+        </label>
+
+        <label class="radio-inline">
+          <input type="radio" name="optperiodic" value="quinzenal" id="idQuinzenal"> Quinzenal, un dia.
+        </label>
+      </div>
+
+
+      <label for="idDia1">Dia 1 :</label>
+      <input type="text" class="form-control" data-provide="datepicker" id="idDia1">
+
+      <label for="idDuradaDia1">Durada servei dia 1 :</label>
+      <select class="form-control" id="idDuradaDia1">
+                  <option value="0.5">30m</option>
+                  <option value="1">1h</option>
+                  <option value="1.5">1h 30m</option>
+                  <option value="2">2h</option>
+                  <option value="2.5">2h 30m</option>
+                  <option value="3">3h</option>
+                  <option value="3.5">3h 30m</option>
+                  <option value="4">4h</option>
+                  <option value="4.5">4h 30m</option>
+                  <option value="5">5h</option>
+                  <option value="5.5">5h 30m</option>
+                  <option value="6">6h</option>
+                  <option value="6.5">6h 30m</option>
+                  <option value="7">7h</option>
+                  <option value="7.5">7h 30m</option>
+                  <option value="8">8h</option>
+      </select>
+
+      <label for="idHoraIniciDia1">Hora inici servei dia 1 :</label>
+      <select class="form-control" id="idHoraIniciaDia1">
+                  <option value="08:00">08:00</option>
+                  <option value="08:30">08:30</option>
+                  <option value="09:00">09:00</option>
+                  <option value="09:30">09:30</option>
+                  <option value="10:00">10:00</option>
+                  <option value="10:30">10:30</option>
+                  <option value="11:00">11:00</option>
+                  <option value="11:30">11:30</option>
+                  <option value="12:00">12:00</option>
+                  <option value="12:30">12:30</option>
+                  <option value="13:00">13:00</option>
+                  <option value="13:30">13:30</option>
+                  <option value="14:00">14:00</option>
+                  <option value="14:30">14:30</option>
+                  <option value="15:00">15:00</option>
+                  <option value="15:30">15:30</option>
+                  <option value="16:00">16:00</option>
+                  <option value="16:30">16:30</option>
+                  <option value="17:00">17:00</option>
+                  <option value="17:30">17:30</option>
+                  <option value="18:00">18:00</option>
+                  <option value="18:30">18:30</option>
+                  <option value="19:00">19:00</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                  <option value="21:00">21:00</option>
+                  <option value="21:30">21:30</option>
+      </select>
+
+      <label for="idDia22">Dia 2 :</label>
+      <input type="text" class="form-control" data-provide="datepicker" id="idDia2">
+
+      <label for="idDuradaDia2">Durada servei dia 2 :</label>
+      <select class="form-control" id="idDuradaDia2">
+        <option value="0"></option>
+                  <option value="0.5">30m</option>
+                  <option value="1">1h</option>
+                  <option value="1.5">1h 30m</option>
+                  <option value="2">2h</option>
+                  <option value="2.5">2h 30m</option>
+                  <option value="3">3h</option>
+                  <option value="3.5">3h 30m</option>
+                  <option value="4">4h</option>
+                  <option value="4.5">4h 30m</option>
+                  <option value="5">5h</option>
+                  <option value="5.5">5h 30m</option>
+                  <option value="6">6h</option>
+                  <option value="6.5">6h 30m</option>
+                  <option value="7">7h</option>
+                  <option value="7.5">7h 30m</option>
+                  <option value="8">8h</option>
+       </select>
+
+      <label for="idHoraIniciDia2">Hora inici servei dia 2 :</label>
+      <select class="form-control" id="idHoraIniciaDia2">
+                  <option value=""></option>
+                  <option value="08:00">08:00</option>
+                  <option value="08:30">08:30</option>
+                  <option value="09:00">09:00</option>
+                  <option value="09:30">09:30</option>
+                  <option value="10:00">10:00</option>
+                  <option value="10:30">10:30</option>
+                  <option value="11:00">11:00</option>
+                  <option value="11:30">11:30</option>
+                  <option value="12:00">12:00</option>
+                  <option value="12:30">12:30</option>
+                  <option value="13:00">13:00</option>
+                  <option value="13:30">13:30</option>
+                  <option value="14:00">14:00</option>
+                  <option value="14:30">14:30</option>
+                  <option value="15:00">15:00</option>
+                  <option value="15:30">15:30</option>
+                  <option value="16:00">16:00</option>
+                  <option value="16:30">16:30</option>
+                  <option value="17:00">17:00</option>
+                  <option value="17:30">17:30</option>
+                  <option value="18:00">18:00</option>
+                  <option value="18:30">18:30</option>
+                  <option value="19:00">19:00</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                  <option value="21:00">21:00</option>
+                  <option value="21:30">21:30</option>
+      </select>
+
+         <button type="button" class="btn btn-primary" onclick="javascript:controller.navigate('reserva tipus')">Ves a reservar tipus de servei</button>
+
+         </fieldset>
+       </form>
+     </div>
+
+     <!-- form resum -->
+     <div class="col-lg-3" style="border: solid; border-width: thin; background-color: rgb(211,211,211);" >
+       <h3>Resum de la reserva</h3>
+       <p>Nom : <span class="res-nom"></span></p>
+       <p>Cognoms : <span class="res-cognoms"></span></p>
+       <p>Correu electrònic : <span class="res-email"></span></p>
+       <p>Telèfon : <span class="res-telefon"></span></p>
+       <p>Carrer : <span class="res-carrer"></span></p>
+       <p>Número : <span class="res-escala"></span></p>
+       <p>Pis / Porta : <span class="res-pis"></span></p>
+       <p>Periodicitat : <span class="res-periodic"></span></p>
+       <p>Dia servei 1 : <span class="res-dia1"></span></p>
+       <p>Hora inici servei 1 : <span class="res-hora1"></span></p>
+       <p>Durada servei 1 : <span class="res-durada1"></span></p>
+       <p>Dia servei 2 : <span class="res-dia2"></span></p>
+       <p>Hora inici servei 2 : <span class="res-hora2"></span></p>
+       <p>Durada servei 2 : <span class="res-durada2"></span></p>
+       <p>Extres dia 1 : <span class="res-extres1"></span></p>
+       <p>Extres dia 2 : <span class="res-extres2"></span></p>
+       <p>Preu per hora : <span class="res-preuhora"></span> €/h</p>
+       <p>Preu total :  <span class="res-total"></span> €</p>
+     </div>
+
+	  </div>
+
+	  </div>
+
+      <!-- form tipus de servei -->
+      <div class="container-fluid acc-settings" id="formReservaTipus" style="visibility: hidden;">
+     <div class="row">
+
+       <!-- form reserva tipus -->
+       <div class="col-lg-9">
+         <form>
+      <fieldset class="form-group">
+        <h3>Dia 1</h3>
+
+        <label for="idHabsDia1">Nombre d'habitacions a netejar :</label>
+        <input type="number" class="form-control" id="idHabsDia1" placeholder="1" maxlength="2">
+
+        <div style="padding: 10px;">
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus1" value="planxat" id="idPlanxat1"> Planxat
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus1" value="interior armaris" id="idArmarisDia1"> Neteja interior d'armaris
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus1" value="interior finestres i vidres" id="idVidres1"> Neteja interior de finestres i vidres
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus1" value="lavabos" id="idLavabos1"> Neteja de lavabos
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus1" value="cuina" id="idCuina1"> Neteja de cuina
+          </label>
+        </div>
+
+        <div style="padding: 10px;">
+          <label class="checkbox">
+            <input type="checkbox" name="optutensilis1" value="utensilis1" id="idUtensilis1"> Portar utensilis bàsics
+          </label>
+        </div>
+
+        <label for="idEspecials1">Indicacions especials als netejador : </label>
+        <textarea class="form-control" id="idEspecials1" rows="1"></textarea>
+
+        <h3>Dia 2</h3>
+
+        <label for="idHabsDia2">Nombre d'habitacions a netejar :</label>
+        <input type="number" class="form-control" id="idHabsDia2" placeholder="1" maxlength="2">
+
+        <div style="padding: 10px;">
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus2" value="planxat" id="idPlanxat2"> Planxat
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus2" value="interior armaris" id="idArmarisDia2"> Neteja interior d'armaris
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus2" value="interior finestres i vidres" id="idVidres2"> Neteja interior de finestres i vidres
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus2" value="lavabos" id="idLavabos2"> Neteja de lavabos
+          </label>
+
+          <label class="checkbox-inline">
+            <input type="checkbox" name="opttipus2" value="cuina" id="idCuina2"> Neteja de cuina
+          </label>
+        </div>
+
+        <div style="padding: 10px;">
+          <label class="checkbox">
+            <input type="checkbox" name="optutensilis2" value="utensilis2" id="idUtensilis2"> Portar utensilis bàsics
+          </label>
+        </div>
+
+        <label for="idEspecials2">Indicacions especials als netejador : </label>
+        <textarea class="form-control" id="idEspecials2" rows="1"></textarea>
+      </fieldset>
+
+      <button type="button" class="btn btn-primary" onclick="javascript:controller.navigate('reserva preu')">Ves a proposta de preu per hora</button>
+         </form>
+       </div>
+
+     <!-- form resum -->
+     <div class="col-lg-3" style="border: solid; border-width: thin; background-color: rgb(211,211,211);" >
+       <h3>Resum de la reserva</h3>
+       <p>Nom : <span class="res-nom"></span></p>
+       <p>Cognoms : <span class="res-cognoms"></span></p>
+       <p>Correu electrònic : <span class="res-email"></span></p>
+       <p>Telèfon : <span class="res-telefon"></span></p>
+       <p>Carrer : <span class="res-carrer"></span></p>
+       <p>Número : <span class="res-escala"></span></p>
+       <p>Pis / Porta : <span class="res-pis"></span></p>
+       <p>Periodicitat : <span class="res-periodic"></span></p>
+       <p>Dia servei 1 : <span class="res-dia1"></span></p>
+       <p>Hora inici servei 1 : <span class="res-hora1"></span></p>
+       <p>Durada servei 1 : <span class="res-durada1"></span></p>
+       <p>Dia servei 2 : <span class="res-dia2"></span></p>
+       <p>Hora inici servei 2 : <span class="res-hora2"></span></p>
+       <p>Durada servei 2 : <span class="res-durada2"></span></p>
+       <p>Extres dia 1 : <span class="res-extres1"></span></p>
+       <p>Extres dia 2 : <span class="res-extres2"></span></p>
+       <p>Preu per hora : <span class="res-preuhora"></span> €/h</p>
+       <p>Preu total :  <span class="res-total"></span> €</p>
+     </div>
+
+     </div>
+
+   </div>
+
+      <!-- form preu per hora -->
+      <div class="container-fluid acc-settings" id="formReservaPreu" style="visibility: hidden;">
+      <div class="row">
+       <!-- form reserva preu -->
+       <div class="col-lg-9">
+         <form>
+         <fieldset class="form-group">
+
+         <label for="idPreuHora">Preu per hora ( € / hora ) : </label>        
+         <input type="number" class="form-control" id="idPreuHora" placeholder="9.90" min="9.90" value="9.90" step="0.01">
+        
+         <button type="button" class="btn btn-primary" onclick="javascript:controller.navigate('reserva pagament')">Ves a tria de tipus de pagament</button>
+         </form>
+       </div>
+
+       <!-- form resum -->
+       <div class="col-lg-3" style="border: solid; border-width: thin; background-color: rgb(211,211,211);" >
+       <h3>Resum de la reserva</h3>
+       <p>Nom : <span class="res-nom"></span></p>
+       <p>Cognoms : <span class="res-cognoms"></span></p>
+       <p>Correu electrònic : <span class="res-email"></span></p>
+       <p>Telèfon : <span class="res-telefon"></span></p>
+       <p>Carrer : <span class="res-carrer"></span></p>
+       <p>Número : <span class="res-escala"></span></p>
+       <p>Pis / Porta : <span class="res-pis"></span></p>
+       <p>Periodicitat : <span class="res-periodic"></span></p>
+       <p>Dia servei 1 : <span class="res-dia1"></span></p>
+       <p>Hora inici servei 1 : <span class="res-hora1"></span></p>
+       <p>Durada servei 1 : <span class="res-durada1"></span></p>
+       <p>Dia servei 2 : <span class="res-dia2"></span></p>
+       <p>Hora inici servei 2 : <span class="res-hora2"></span></p>
+       <p>Durada servei 2 : <span class="res-durada2"></span></p>
+       <p>Extres dia 1 : <span class="res-extres1"></span></p>
+       <p>Extres dia 2 : <span class="res-extres2"></span></p>
+       <p>Preu per hora : <span class="res-preuhora"></span> €/h</p>
+       <p>Preu total :  <span class="res-total"></span> €</p>
+       </div>
+     </div>
+     </div>
+     
+      <!-- form pagament -->
+      <div class="container-fluid acc-settings" id="formReservaPagament" style="visibility: hidden;">
+        <div class="row">
+        <!-- form pagament targeta / paypal -->
+          <div class="col-lg-9">
+            <form>
+              <fieldset class="form-group">
+                  <div class="col-lg-4">
+                    <!-- form pagament targeta -->
+                    <div>
+                    <label for="idChkTargeta">Targeta :        
+                    <input type="radio" class="form-control" name="radiotipuspagament" id="idChkTargeta"> </label>
+                    </div>
+                    
+                    <label for="idNumTargeta">Número de targeta : </label>        
+                    <input type="text" class="form-control" id="idNumTargeta"
+                    placeholder="9999 9999 9999 9999" maxlength="19">
+                  
+                    <label>Mes i any de caducitat : </label>
+            <div class="row">
+            <div class="col-xs-4">
+              <select class="form-control col-sm-2" name="expiry-month" id="idMesCaducitat">
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+            <div class="col-xs-6">
+              <select class="form-control" name="expiry-year" id="idAnyCaducitat">
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+            </div>
+  
+                    <label for="idCCV">CCV :               
+                    <input type="number" class="form-control" id="idCCV" placeholder="999" maxlength="3">
+                    </label>
+                    
+                  </div>
+                
+                  <div class="col-lg-4">
+                    <!-- form pagament paypal -->
+                    <div>
+                    <label for="idChkPaypal">Paypal :        
+                    <input type="radio" class="form-control" name="radiotipuspagament"  id="idChkPaypal"> </label>
+               	  </div>
+                    
+                    <label for="idEmailPaypal">Correu electrònic : </label>        
+                    <input type="email" class="form-control" id="idEmailPaypal" 
+                    placeholder="correu@electronic.com" maxlength="50">
+                  
+                    <label for="idTelPaypal">Número de telèfon : </label>        
+                    <input type="phone" class="form-control" id="idTelPaypal"
+                    placeholder="99999999" maxlength="9">
+
+                  </div>
+              
+              </fieldset>
+              <button type="button" class="btn btn-primary" onclick="javascript:controller.navigate('resum')">Ves el resum</button>
+            </form>
+          </div>
+
+          <!-- form resum -->
+       <!-- form resum -->
+       <div class="col-lg-3" style="border: solid; border-width: thin; background-color: rgb(211,211,211);" >
+       <h3>Resum de la reserva</h3>
+       <p>Nom : <span class="res-nom"></span></p>
+       <p>Cognoms : <span class="res-cognoms"></span></p>
+       <p>Correu electrònic : <span class="res-email"></span></p>
+       <p>Telèfon : <span class="res-telefon"></span></p>
+       <p>Carrer : <span class="res-carrer"></span></p>
+       <p>Número : <span class="res-escala"></span></p>
+       <p>Pis / Porta : <span class="res-pis"></span></p>
+       <p>Periodicitat : <span class="res-periodic"></span></p>
+       <p>Dia servei 1 : <span class="res-dia1"></span></p>
+       <p>Hora inici servei 1 : <span class="res-hora1"></span></p>
+       <p>Durada servei 1 : <span class="res-durada1"></span></p>
+       <p>Dia servei 2 : <span class="res-dia2"></span></p>
+       <p>Hora inici servei 2 : <span class="res-hora2"></span></p>
+       <p>Durada servei 2 : <span class="res-durada2"></span></p>
+       <p>Extres dia 1 : <span class="res-extres1"></span></p>
+       <p>Extres dia 2 : <span class="res-extres2"></span></p>
+       <p>Preu per hora : <span class="res-preuhora"></span> €/h</p>
+       <p>Preu total :  <span class="res-total"></span> €</p>
+       </div>
+        </div>
+      </div>
+   
+      <!-- form resum -->      
+      <div class="container acc-settings" id="formResum" style="visibility: hidden;">
+       <h3>Resum de la reserva</h3>
+       <p>Nom : <span class="res-nom"></span></p>
+       <p>Cognoms : <span class="res-cognoms"></span></p>
+       <p>Correu electrònic : <span class="res-email"></span></p>
+       <p>Telèfon : <span class="res-telefon"></span></p>
+       <p>Carrer : <span class="res-carrer"></span></p>
+       <p>Número : <span class="res-escala"></span></p>
+       <p>Pis / Porta : <span class="res-pis"></span></p>
+       <p>Periodicitat : <span class="res-periodic"></span></p>
+       <p>Dia servei 1 : <span class="res-dia1"></span></p>
+       <p>Hora inici servei 1 : <span class="res-hora1"></span></p>
+       <p>Durada servei 1 : <span class="res-durada1"></span></p>
+       <p>Dia servei 2 : <span class="res-dia2"></span></p>
+       <p>Hora inici servei 2 : <span class="res-hora2"></span></p>
+       <p>Durada servei 2 : <span class="res-durada2"></span></p>
+       <p>Extres dia 1 : <span class="res-extres1"></span></p>
+       <p>Extres dia 2 : <span class="res-extres2"></span></p>
+       <p>Preu per hora : <span class="res-preuhora"></span> €/h</p>
+       <p>Preu total :  <span class="res-total"></span> €</p>
+
+       <button type="button" class="btn btn-primary" onclick="javascript:controller.navigate('final')">Fer el pagament</button>
+       <button type="reset" class="btn btn-primary" onclick="javascript:controller.navigate('cancel')">Cancel·lar</button>
+       </div>
+
+		<!-- form ajuda -->
+      <div class="container acc-settings" id="formAjuda" style="visibility: hidden;">
+      <h1>Ajuda</h1>
+      <p>Aquí va l'ajuda general de la pàgina.</p>
+      <p>Per exemple :</p>
+      <p>Descricpció general del servei</p> 
+      <p>Com registrar-se</p>
+      <p>Descricpció de les pestanyes</p>
+      <p>Tarifes</p>
+      <p>...</p>
+      <a href="javascript:controller.navigate('inici')">Tancar la pàgina d'ajuda</a>
+      </div>
+   
+   </div>
+
+   <div class="footer">
+     <p>Albert Baranguer Codina - Curs 2017-18 - 2on semestre - Consultora : Marta González Mata</p>
+   </div>
+
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <!-- Include all compiled plugins (below), or include individual files as needed -->
+   <script src="js/bootstrap.min.js"></script>
+
+  </body>
+</html>
