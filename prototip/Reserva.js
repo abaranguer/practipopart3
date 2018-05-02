@@ -158,61 +158,90 @@ function Reserva() {
         this.emailPaypal = document.getElementById("idEmailPaypal").value;
         this.telefonPaypal = document.getElementById("idTelPaypal").value;
         
-        this.totalHores = this.durada1 + this.durada2;
+		this.extres1 = "No";
+		this.extres2 = "No";
+		
+		if (this.unic) {
+			this.periodic = "Servei únic";
+		}
+		
+		if (this.setmanal1dia) {
+			this.periodic = "Servei setmanal, un cop per setmana";
+		}
+		
+		if (this.setmanal2dies) {
+			this.periodic = "Servei setmanal, dos cops per setmana";
+		}
+		
+		if (this.quinzenal) {
+			this.periodic = "Servei quinzenal";
+		}
+		
+        this.totalHores = Number(this.durada1) + Number(this.durada2);
         
         if (this.planxatDia1) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de planxat (dia 1)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de planxat (dia 1)
+			this.extres1 = "Sí";
         }
         
         if (this.armarisDia1) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' d'armaris (dia 1)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' d'armaris (dia 1)
+			this.extres1 = "Sí";
         }
         
         if (this.vidresDia1) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de vidres (dia 1)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de vidres (dia 1)
+			this.extres1 = "Sí";
         }
 
         if (this.lavabosDia1) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de lavabos (dia 1)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de lavabos (dia 1)
+			this.extres1 = "Sí";
         }
         
         if (this.cuinaDia1) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de cuina (dia 1)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de cuina (dia 1)
+			this.extres1 = "Sí";
         }
         
         if (this.planxatDia12) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de planxat (dia 2)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de planxat (dia 2)
+			this.extres2 = "Sí";
         }
         
         if (this.armarisDia2) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' d'armaris (dia 2)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' d'armaris (dia 2)
+			this.extres2 = "Sí";
         }
         
         if (this.vidresDia2) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de vidres (dia 2)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de vidres (dia 2)
+			this.extres2 = "Sí";
         }
 
         if (this.lavabosDia2) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de lavabos (dia 2)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de lavabos (dia 2)
+			this.extres2 = "Sí";
         }
         
         if (this.cuinaDia2) {
-            this.totalHores = this.totalHores + 0.5;  // suma 30' de cuina (dia 2)
+            this.totalHores = Number(this.totalHores) + 0.5;  // suma 30' de cuina (dia 2)
+			this.extres2 = "Sí";
         }        
         
-        this.totalPreu = this.totalHores * this.preuHora;
+        this.totalPreu = Number(this.totalHores) * Number(this.preuHora);
         
         if (this.utensilisDia1) {
-            this.totalPreu = this.totalPreu + 3;  // suma 3€ si ha de portar utensilis (dia 1)
+            this.totalPreu = Number(this.totalPreu) + 3.0;  // suma 3€ si ha de portar utensilis (dia 1)
         } 
         if (this.utensilisDia2) {
-            this.totalPreu = this.totalPreu + 3;  // suma 3€ si ha de portar utensilis (dia 2)
+            this.totalPreu = Number(this.totalPreu) + 3.0;  // suma 3€ si ha de portar utensilis (dia 2)
         }
     }
     
     this.showReserva = function () {
         for (var i = 0; i <= 4; i++) {
-        	document.getElementsByClassName("res-periodic")[i].innerHTML = this.periodic;
+         document.getElementsByClassName("res-periodic")[i].innerHTML = this.periodic;
          document.getElementsByClassName("res-dia1")[i].innerHTML = this.dia1;
          document.getElementsByClassName("res-hora1")[i].innerHTML = this.horaInici1;
          document.getElementsByClassName("res-durada1")[i].innerHTML = this.durada1;
